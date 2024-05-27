@@ -90,6 +90,7 @@ const show = (req, res) => {
                     <h3>${reqPost.title}</h3>
                     <img width="200" src=${`/${reqPost.image}`} />
                     <p><strong>Ingredienti</strong>: ${reqPost.tags.map(tag => `<span class="tag">#${tag}</span>`).join(' ')}</p>
+                    <a href="/posts/${reqPost.slug}/download">Scarica immagine</a>
                 </div>
                 `)
             } else {
@@ -100,7 +101,8 @@ const show = (req, res) => {
             if (reqPost) {
                 res.json({
                     ...reqPost,
-                    image_url: `http://${req.headers.host}/${reqPost.image}`
+                    image_url: `http://${req.headers.host}/${reqPost.image}`,
+                    image_download_url: `http://${req.headers.host}/${reqPost.slug}/download`
                 })
             } else {
                 res.status(404).json({
@@ -127,7 +129,7 @@ const downloadImg = (req, res) => {
     const slug = decodeURIComponent(req.params.slug);
     const reqPost = posts.find(post => post.slug === slug);
     const imagePath = path.join(__dirname, '..', 'public', 'imgs', 'posts', `${slug}.jpeg`);
-    
+
     res.download(imagePath);
 }
 
