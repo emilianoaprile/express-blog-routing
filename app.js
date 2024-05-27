@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const app = express();
 const port = 3000;
-const blogsRouter = require("./routers/blogs.js")
+const blogsRouter = require("./routers/posts.js")
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
     res.sendFile(filePath);
 });
 
-app.use('/blogs', blogsRouter);
+app.use('/posts', blogsRouter);
 
 
 app.listen(port, () => {

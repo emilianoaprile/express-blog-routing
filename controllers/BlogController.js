@@ -66,11 +66,53 @@ const index = (req, res) => {
             res.send(html)
         },
         json: () => {
-            res.json(posts);
+            res.json({
+                data: posts,
+                count: posts.length
+            });
         }
     });
 }
+const show = (req, res) => {
+    const slug = req.params.slug;
+    const reqPost = posts.find(post => post.slug === slug)
+
+    res.format({
+        html: () => {
+            if (reqPost) {
+                res.send(`
+                <div>
+                    <h3>${reqPost.title}</h3>
+                    <img width="200" src=${`/${reqPost.image}`} />
+                    <p><strong>Ingredienti</strong>: ${reqPost.tags.map(tag => `<span class="tag">#${tag}</span>`).join(' ')}</p>
+                </div>
+                `)
+            } else {
+                res.status(404).send(`Post non trovato!`)
+            }
+        },
+        json: () => {
+            if (reqPost) {
+                res.json({
+                    ...reqPost,
+                    image_url: `http://${req.headers.host}/${posts.image}`
+                })
+            } else {
+                res.status(404).json({
+                    error: 'Not Found',
+                    description: `Non esiste un post con slug ${slug}`
+                })
+            }
+        }
+    })
+
+
+
+
+}
+
 
 module.exports = {
-    index
+    index,
+    show
 }
