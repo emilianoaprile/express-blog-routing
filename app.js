@@ -1,19 +1,21 @@
 const express = require("express");
+const path = require("path");
 const app = express();
 const port = 3000;
+const blogsRouter = require("./routers/blogs.js")
 
 app.use(express.static('public'));
 app.use(express.json());
 
 
 app.get('/', (req, res) => {
-    res.end(`
-    <h1>Benvenuto nel mio blog!</h1>
-    <a href="/posts">Vai ai Posts</a>
-    `)
-})
+    const filePath = path.join(__dirname, './index.html');
+    res.sendFile(filePath);
+});
+
+app.use('/blogs', blogsRouter);
 
 
 app.listen(port, () => {
     console.log(`Server avviato su http://localhost:${port}`)
-})
+});
