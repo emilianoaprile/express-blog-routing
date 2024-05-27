@@ -42,7 +42,9 @@
 //         tags: ["Dolci", "Dolci al cioccolato", "Torte", "Ricette vegetariane", "Ricette al forno"],
 //     },
 // ];
-let posts = require("../db/posts.json");
+const posts = require("../db/posts.json");
+const path = require("path");
+const fs = require("fs");
 
 
 const index = (req, res) => {
@@ -116,14 +118,24 @@ const create = (req, res) => {
             res.send('<h1>Creazione nuovo post</h1>')
         },
         default: () => {
-            res.status(406).send('Not Acceptable');
+            res.status(406).send('Tipo di file non accetabile');
         }
     });
 };
+
+const downloadImg = (req, res) => {
+    const slug = decodeURIComponent(req.params.slug);
+    const reqPost = posts.find(post => post.slug === slug);
+    const imagePath = path.join(__dirname, '..', 'public', 'imgs', 'posts', `${slug}.jpeg`);
+    
+    res.download(imagePath);
+}
+
 
 
 module.exports = {
     index,
     show,
-    create
+    create,
+    downloadImg
 }
