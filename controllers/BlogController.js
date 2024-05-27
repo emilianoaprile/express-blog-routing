@@ -62,7 +62,7 @@ const index = (req, res) => {
                             <img width="400px" src="/${post.image}"/>
                             <h2>${post.title}</h2>
                             <p>${post.content}</p>
-                            <a href="/">Guarda il post</a>
+                            <a href="/posts/${post.slug}">Visualizza post</a>
                         </div>
                     `;
                 post.tags.forEach(tag => html += `<span>#${tag}</span>`);
